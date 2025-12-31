@@ -6,4 +6,9 @@ wss.on("connection" ,function(socket){
     setInterval(()=>{
         socket.send("Current Price Of Gold : " + (Math.random()*1000))
     }, 5000)
+
+    socket.on("message" , (e)=>{
+        console.log(e.toString());
+        
+    })
 })
