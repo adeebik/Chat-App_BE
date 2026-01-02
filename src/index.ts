@@ -1,14 +1,19 @@
 import { WebSocketServer } from "ws";
+
 const wss = new WebSocketServer({ port: 8000 });
+let allSocket = [];
 
-wss.on("connection" ,function(socket){
+wss.on("connection", (socket) => {
+  allSocket.push(socket);
 
-    socket.on("message" , (e)=>{
-        if(e.toString() == "ping"){
-            socket.send("pong"); 
-        };
-    })
+  console.log("User Connected #");
 
-})
+  socket.on("message", (msg) => {
+    console.log("msg received :" + msg.toString());
+    allSocket.forEach((e) => e.send(msg.toString() + " : sent from server"));
+  });
 
-// first commit of 2026
+  socket.on("disconnect", () => {
+    allSocket.filter((x) => x != socket);
+  });
+});
